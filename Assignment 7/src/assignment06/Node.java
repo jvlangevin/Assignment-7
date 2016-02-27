@@ -1,6 +1,3 @@
-/*
- * Jason Langevin
- */
 
 package assignment06;
 
