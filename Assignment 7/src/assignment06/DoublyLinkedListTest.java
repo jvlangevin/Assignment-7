@@ -1,319 +1,401 @@
-
 package assignment06;
 
 import static org.junit.Assert.*;
+
 import java.util.Iterator;
-import org.junit.After;
-import org.junit.Before;
+import java.util.NoSuchElementException;
+
 import org.junit.Test;
 
-public class DoublyLinkedListTest extends DoublyLinkedList<Integer> {
 
-	DoublyLinkedList<Integer> emptyList;
-	DoublyLinkedList<Integer> filledList;
-	DoublyLinkedList<Integer> singleElementList;
-	DoublyLinkedList<Integer> filledListFirstElementMissing;
-	DoublyLinkedList<Integer> filledListMiddleElementMissing;
-	DoublyLinkedList<Integer> filledListDuplicateMiddleElement;
-	DoublyLinkedList<Integer> filledListDuplicateMiddleElements;
-	Iterator<Node<Integer>> iterator;
+/**
+ * General test case file for each method
+ * @author Nathan Novak u0347907
+ * @Author Joseph Horne
+ *
+ */
+public class DoublyLinkedListTest {
 
-	@Before
-	public void setUp() throws Exception {
-		emptyList = new DoublyLinkedList<Integer>();
-
-		filledList = new DoublyLinkedList<Integer>();
-		for (int i = 1; i <= 100; i++) {
-			filledList.add(i - 1, i);
-		}
-
-		singleElementList = new DoublyLinkedList<Integer>();
-		singleElementList.addFirst(1);
-
-		filledListFirstElementMissing = new DoublyLinkedList<Integer>();
-		for (int i = 2; i <= 100; i++) {
-			filledListFirstElementMissing.add(i - 2, i);
-		}
-
-		filledListMiddleElementMissing = new DoublyLinkedList<Integer>();
-		for (int i = 1; i <= 49; i++) {
-			filledListMiddleElementMissing.add(i - 1, i);
-		}
-		for (int i = 51; i <= 100; i++) {
-			filledListMiddleElementMissing.add(i - 2, i);
-		}
-
-		filledListDuplicateMiddleElement = new DoublyLinkedList<Integer>();
-		for (int i = 1; i <= 100; i++) {
-			filledListDuplicateMiddleElement.add(i - 1, i);
-		}
-		filledListDuplicateMiddleElement.add(50, 50);
+	@Test
+	public void addFirstAddLastStringGetBoth() {
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
 		
-		filledListDuplicateMiddleElements = new DoublyLinkedList<Integer>();
-		for (int i = 1; i <= 100; i++) {
-			filledListDuplicateMiddleElements.add(i - 1, i);
-		}
-		filledListDuplicateMiddleElements.add(50, 50);
-		filledListDuplicateMiddleElements.add(50, 50);
-		filledListDuplicateMiddleElements.add(50, 50);
-		filledListDuplicateMiddleElements.add(50, 50);
-		}
-
-	@After
-	public void clear() {
-		filledList.clear();
-		singleElementList.clear();
-		filledListFirstElementMissing.clear();
-		filledListMiddleElementMissing.clear();
-		filledListDuplicateMiddleElement.clear();
+		myList.addFirst("Start");
+		myList.addLast("End");
+		
+		
+		assertEquals("Start", myList.getFirst());
+		assertEquals("End", myList.getLast());
+		
 	}
+	
 
 	@Test
-	public void addFirstToEmptyList() {
-		emptyList.addFirst(1);
-		assertEquals(1, (int) emptyList.get(0));
-	}
-
-	@Test
-	public void addFirstToFilledList() {
-		filledListFirstElementMissing.addFirst(1);
-		iterator = filledListFirstElementMissing.iterator();
-		int count = 1;
-		while (iterator.hasNext()) {
-			assertEquals(count, (int)iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void addLastToEmptyList() {
-		emptyList.addLast(1);
-		assertEquals(1, (int) emptyList.get(0));
-	}
-
-	@Test
-	public void addLastToFilledList() {
-		filledList.addLast(101);
-		int count = 1;
-		iterator = filledList.iterator();
-		while (iterator.hasNext()) {
-			assertEquals(count, (int)iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void addToEmptyList() {
-		emptyList.add(0, 1);
-		assertEquals(1, (int) emptyList.get(0));
-	}
-
-	@Test
-	public void addToStartOfFilledList() {
-		filledListFirstElementMissing.add(0, 1);
-		int count = 1;
-		iterator = filledListFirstElementMissing.iterator();
-		while (iterator.hasNext()) {
-			assertEquals(count, (int)iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void addToMiddleOfFilledList() {
-		filledListMiddleElementMissing.add(49, 50);
-		int count = 1;
-		iterator = filledListMiddleElementMissing.iterator();
-		while (iterator.hasNext()) {
-			assertEquals(count, (int)iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void addToEndOfFilledList() {
-		filledList.add(100, 101);
-		int count = 1;
-		iterator = filledList.iterator();
-		while (iterator.hasNext()) {
-			assertEquals(count, (int)iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void getFirstFromSingleElementList() {
-		assertEquals(1, (int) singleElementList.getFirst());
-	}
-
-	@Test
-	public void getFirstFromFilledList() {
-		assertEquals(1, (int) filledList.getFirst());
-	}
-
-	@Test
-	public void getLastFromSingleElementList() {
-		assertEquals(1, (int) singleElementList.getLast());
-	}
-
-	@Test
-	public void getLastFromFilledList() {
-		assertEquals(100, (int) filledList.getLast());
-	}
-
-	@Test
-	public void getFromSingleElementList() {
-		assertEquals(1, (int) singleElementList.get(0));
-	}
-
-	@Test
-	public void getRandomElementFromFilledList() {
-		int randomInt = (int) (Math.random() * 100);
-		assertEquals(randomInt, (int) filledList.get(randomInt - 1));
-	}
-
-	@Test
-	public void removeFirstFromSingleElementList() {
-		assertEquals(1, (int) singleElementList.removeFirst());
-		assertTrue(singleElementList.size == 0);
-	}
-
-	@Test
-	public void removeFirstFromFilledList() {
-		assertEquals(1, (int) filledList.removeFirst());
-		iterator = this.iterator();
-		int count = 2;
-		while (iterator.hasNext()) {
-			assertEquals(count, (int) iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void removeLastFromSingleElementList() {
-		assertEquals(1, (int) singleElementList.removeLast());
-		assertTrue(singleElementList.size == 0);
-	}
-
-	@Test
-	public void removeLastFromFilledList() {
-		assertEquals(100, (int) filledList.removeLast());
-		iterator = this.iterator();
-		int count = 1;
-		while (iterator.hasNext()) {
-			assertEquals(count, (int) iterator.next().data);
-			count++;
-		}
-	}
-
-	@Test
-	public void removeFromSingleElementList() {
-		assertEquals(1, (int) singleElementList.remove(0));
-		assertTrue(size == 0);
-	}
-
-	@Test
-	public void removeRandomElementFromFilledList() {
-		int randomInt = (int) (Math.random() * 100) + 1;
-		assertEquals(randomInt - 1, (int) filledList.remove(randomInt - 2));
-		assertFalse(contains(filledList, randomInt));
-	}
-
-	@Test
-	public void indexOfElementInSingleElementList(){
-		assertEquals(0, singleElementList.indexOf(1));
+	public void addFirstAddLastIntGetBoth() {
+		DoublyLinkedList<Integer> myList = new DoublyLinkedList<>();
+		
+		myList.addFirst(5);
+		myList.addLast(6);
+		
+		
+		assertEquals(5, (int)myList.getFirst());
+		assertEquals(6, (int)myList.getLast());
+		
 	}
 	
 	@Test
-	public void indexOfFirstInstanceOfDuplicateElementInFilledList(){
-		assertEquals(49, filledListDuplicateMiddleElements.indexOf(50));
+	public void addAndGetOneStringNodeWithIndex(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		myList.addLast("End");
+		
+		myList.add(0, "Middle");
+		
+		assertEquals("Middle", myList.get(0));
+		
 	}
 	
 	@Test
-	public void lastIndexOfElementInSingleElementList(){
-		assertEquals(0, singleElementList.lastIndexOf(1));
+	public void addMultipleStringsWithZeroIndex(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		myList.addLast("End");
+		
+		myList.add(0, "Middle1");
+		myList.add(0, "Middle2");
+		myList.add(0, "Middle3");
+		myList.add(0, "Middle4");
+		myList.add(0, "Middle5");
+		
+		assertEquals("Middle5", myList.get(0));
+		
+	}
+
+	@Test
+	public void addMultipleStringsIndexGreaterThan2(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		myList.addLast("End");
+		
+		myList.add(0, "Middle1");
+		myList.add(0, "Middle2");
+		myList.add(0, "Middle3");
+		myList.add(0, "Middle4");
+		myList.add(0, "Middle5");
+		myList.add(6, "Answer");
+		
+		assertEquals("Answer", myList.get(6));
+		
 	}
 	
 	@Test
-	public void lastIndexOfDuplicateElementInFilledList(){
-		assertEquals(53, filledListDuplicateMiddleElements.lastIndexOf(50));
+	public void getSizeWithFourElements(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		myList.addLast("End");
+		
+		myList.add(0, "Middle1");
+		myList.add(0, "Middle2");
+		
+		assertEquals(4, myList.size());
+		
 	}
 	
 	@Test
-	public void testSizeMethod(){
-		assertEquals(0, emptyList.size);
-		assertEquals(1, singleElementList.size);
-		assertEquals(100, filledList.size);
-		assertEquals(99, filledListFirstElementMissing.size);
-		assertEquals(99, filledListMiddleElementMissing.size);
-		assertEquals(101, filledListDuplicateMiddleElement.size);
-		assertEquals(104, filledListDuplicateMiddleElements.size);
+	public void addFourElementsThenClearTestIsEmpty(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		myList.addLast("End");
+		
+		myList.add(0, "Middle1");
+		myList.add(0, "Middle2");
+		
+		myList.clear();
+		assertEquals(true, myList.isEmpty());
+		
 	}
 	
 	@Test
-	public void testIsEmptyMethod(){
-		assertTrue(emptyList.isEmpty());
-		assertFalse(filledList.isEmpty());
+	public void changeBinaryToArray(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		Object[] arrayTest = myList.toArray();
+		
+		assertEquals("Start", arrayTest[0]);
+		assertEquals("End", arrayTest[6]);
+		assertEquals(7, arrayTest.length);
+		
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void changeEmptyBinaryToArrayGetException(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		Object[] arrayTest = myList.toArray();
+		
+		
+	}
+	
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void getItemButIndexOutOfBounds(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		myList.get(8);
+		
+	}
+	
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void addItemButIndexOutOfBounds(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.add(7, "Middle5");
+
+		
+	}
+	
+	@Test(expected = NoSuchElementException.class)
+	public void getFirstButNoFirst(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.getFirst();
+		
 	}
 	
 	@Test
-	public void testClearMethod(){
-		filledList.clear();
-		assertEquals(null, filledList.head);
-		assertTrue(filledList.size == 0);
+	public void testIteratorHasNext(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		Iterator<String> myIterator = myList.iterator();
+		
+		assertEquals(true, myIterator.hasNext());
+		
+		myIterator.next();
+		myIterator.next();
+		myIterator.next();
+		myIterator.next();
+		myIterator.next();
+		myIterator.next();
+		myIterator.next();
+		
+		assertEquals(false, myIterator.hasNext());
+		
 	}
 	
 	@Test
-	public void emptyListToArray(){
-		Object[] testArray = new Object[0];
-		assertArrayEquals(testArray, emptyList.toArray());
+	public void testIteratorNext(){
+		
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		Iterator<String> myIterator = myList.iterator();
+		
+		assertEquals("Start", myIterator.next());
+		assertEquals("Middle1", myIterator.next());
+		assertEquals("Middle2", myIterator.next());
+		assertEquals("Middle3", myIterator.next());
+		assertEquals("Middle4", myIterator.next());
+		assertEquals("Middle5", myIterator.next());
+		assertEquals("End", myIterator.next());
+		
 	}
 	
 	@Test
-	public void singleElementListToArray(){
-		Object[] testArray = new Object[1];
-		testArray[0] = 1;
-		assertArrayEquals(testArray, singleElementList.toArray());
+	public void testIteratorRemove(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		Iterator<String> myIterator = myList.iterator();
+		
+		myIterator.next();
+		myIterator.remove();
+		
+		assertEquals("Middle1", myList.getFirst());
+		
 	}
 	
 	@Test
-	public void filledListToArray(){
-		Object[] testArray = new Object[100];
-		for (int i = 1; i <= 100; i++){
-			testArray[i - 1] = i;
-		}
-		assertArrayEquals(testArray, filledList.toArray());
+	public void removeFirst(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		assertEquals(7, myList.size());
+		assertEquals("Start", myList.getFirst());
+		
+		myList.removeFirst();
+		
+		
+		assertEquals(6, myList.size());
+		assertEquals("Middle1", myList.getFirst());
 	}
 	
 	@Test
-	public void iteratorHasNextMethodOnEmptyArray(){
-		assertFalse(emptyList.iterator().hasNext());
+	public void removeLast(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		assertEquals(7, myList.size());
+		assertEquals("End", myList.getLast());
+		
+		myList.removeLast();
+		
+		
+		assertEquals(6, myList.size());
+		assertEquals("Middle5", myList.getLast());
 	}
 	
 	@Test
-	public void iteratorNextMethodOnFilledArray(){
-		iterator = filledList.iterator();
-		int count = 1;
-		while (iterator.hasNext()){
-			assertEquals(count, (int)iterator.next().data);
-			count++;
-		}
+	public void removeWithIndex(){
+		
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		assertEquals(7, myList.size());
+		assertEquals("Middle3", myList.get(3));
+		
+		myList.remove(3);
+		
+		assertEquals(6, myList.size());
+		assertEquals("Middle4", myList.get(3));
+		
 	}
 	
-	/**
-	 * 
-	 * @param list
-	 * @param element
-	 * @return True if the specified element is in the specified list,
-	 *  returns false otherwise
-	 */
-	private boolean contains(DoublyLinkedList<Integer> list, int element) {
-		Iterator<Node<Integer>> iterator = list.iterator();
-		while (iterator.hasNext()) {
-			if (iterator.next().data == element) {
-				return false;
-			}
-		}
-		return true;
+	
+	@Test (expected = NullPointerException.class)
+	public void testIteratorRemoveTwice(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		Iterator<String> myIterator = myList.iterator();
+		
+		myIterator.next();
+		myIterator.remove();
+		myIterator.remove();
+		
+		
 	}
+	
+	@Test 
+	public void testIteratorNextTwiceRemoveTwice(){
+		DoublyLinkedList<String> myList = new DoublyLinkedList<String>();
+		
+		myList.addFirst("Start");
+		
+		
+		myList.add(1, "Middle1");
+		myList.add(2, "Middle2");
+		myList.add(3, "Middle3");
+		myList.add(4, "Middle4");
+		myList.add(5, "Middle5");
+		myList.addLast("End");
+		
+		Iterator<String> myIterator = myList.iterator();
+		
+		myIterator.next();
+		myIterator.next();
+		myIterator.remove();
+		myIterator.remove();
+		
+		assertEquals("Middle2", myList.getFirst());
+		
+	}
+	
+	
+
 }
