@@ -39,7 +39,7 @@ public class LinkedListStack<E> {
 	 */
 	public E peek() throws NoSuchElementException {
 		// FILL IN
-		return null;
+		return stack.getLast();
 	}
 
 	/**
@@ -48,14 +48,14 @@ public class LinkedListStack<E> {
 	 */
 	public E pop() throws NoSuchElementException {
 		// FILL IN
-		return null;
+		return stack.removeLast();
 	}
 
 	/**
 	 * Pushes the input item onto the top of the stack.
 	 */
 	public void push(E item) {
-		// FILL IN
+		stack.addLast(item);
 	}
 
 	/**
