@@ -30,12 +30,12 @@ public class BalancedSymbolChecker {
 			
 			String thisLine = scanner.nextLine();
 			lineNumber++;
-			int column = 0; // Keeps track of the column of a given character in the line
+			int colNumber = 0; // Keeps track of the column of a given character in the line
 			
 			// Loops through each character in the current line
 			for (int i = 0; i < thisLine.length(); i++){
 				
-				column++;
+				colNumber++;
 				char currentChar = thisLine.charAt(i);
 				
 				// If the current character is {, [, or (, it is pushed onto the stack 
@@ -46,24 +46,11 @@ public class BalancedSymbolChecker {
 				// Checks if the current character is }, ], or )
 				if (currentChar == '}' || currentChar == ']' || currentChar == ')'){
 					
-					// If the stack is empty, that means the current character does not have a 
-					// matching symbol
+					// If the stack is empty, then no closing symbol should be expected at
+					// this point
 					if (charStack.isEmpty()){
-						
-						if (currentChar == '}'){
-							scanner.close();
-							return unmatchedSymbolAtEOF('{');
-						}
-						
-						else if (currentChar == ']'){
-							scanner.close();
-							return unmatchedSymbolAtEOF('[');
-						}
-						
-						else{
-							scanner.close();
-							return unmatchedSymbolAtEOF('(');
-						}
+						scanner.close();
+						return unmatchedSymbol(lineNumber, colNumber, currentChar, ' ');
 					}
 					
 					// If the character at the top of the stack is not the matching symbol
@@ -71,22 +58,22 @@ public class BalancedSymbolChecker {
 					
 					if (charStack.peek() == '{' && currentChar != '}'){
 						scanner.close();
-						return unmatchedSymbol(lineNumber, column, currentChar, '}');
+						return unmatchedSymbol(lineNumber, colNumber, currentChar, '}');
 					}
 					
 					else if (charStack.peek() == '[' && currentChar != ']'){
 						scanner.close();
-						return unmatchedSymbol(lineNumber, column, currentChar, ']');
+						return unmatchedSymbol(lineNumber, colNumber, currentChar, ']');
 					}
 					
 					else if (charStack.peek() == '(' && currentChar != ')'){
 						scanner.close();
-						return unmatchedSymbol(lineNumber, column, currentChar, ')');
+						return unmatchedSymbol(lineNumber, colNumber, currentChar, ')');
 					}
 					
 					// If the element at the top of the stack is the matching symbol of the
-					// current character, the top element is popped, and the scanner continues
-					// reading the file
+					// current character, the top element is popped, and reading of the file
+					// is resumed
 					else{
 						charStack.pop();
 					}
