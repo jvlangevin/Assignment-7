@@ -24,25 +24,30 @@ public class BalancedSymbolChecker {
 		
 		charStack = new LinkedListStack<>();
 		Scanner scanner = new Scanner(new File(filename));
-		int lineNumber = 0;
+		int lineNumber = 0; // Keeps track of which line of the file the Scanner is reading
 		
 		while (scanner.hasNextLine()){
 			
 			String thisLine = scanner.nextLine();
 			lineNumber++;
-			int column = 0;
+			int column = 0; // Keeps track of the column of a given character in the line
 			
+			// Loops through each character in the current line
 			for (int i = 0; i < thisLine.length(); i++){
 				
 				column++;
 				char currentChar = thisLine.charAt(i);
 				
+				// If the current character is {, [, or (, it is pushed onto the stack 
 				if (currentChar == '{' || currentChar == '[' || currentChar == '('){
 					charStack.push(currentChar);
 				}
 				
+				// Checks if the current character is }, ], or )
 				if (currentChar == '}' || currentChar == ']' || currentChar == ')'){
 					
+					// If the stack is empty, that means the current character does not have a 
+					// matching symbol
 					if (charStack.isEmpty()){
 						
 						if (currentChar == '}'){
@@ -61,6 +66,9 @@ public class BalancedSymbolChecker {
 						}
 					}
 					
+					// If the character at the top of the stack is not the matching symbol
+					// of the current element
+					
 					if (charStack.peek() == '{' && currentChar != '}'){
 						scanner.close();
 						return unmatchedSymbol(lineNumber, column, currentChar, '}');
@@ -75,6 +83,10 @@ public class BalancedSymbolChecker {
 						scanner.close();
 						return unmatchedSymbol(lineNumber, column, currentChar, ')');
 					}
+					
+					// If the element at the top of the stack is the matching symbol of the
+					// current character, the top element is popped, and the scanner continues
+					// reading the file
 					else{
 						charStack.pop();
 					}
@@ -83,10 +95,13 @@ public class BalancedSymbolChecker {
 		}
 		scanner.close();
 
+		// If the end of the file is reached and the stack is empty, then all of the symbols match
 		if (charStack.isEmpty()){
 			return allSymbolsMatch();
 		}
 		
+		// If the end of the file is reached and the stack is not empty, then the file contains
+		// an unmatched symbol
 		else{
 			if (charStack.peek() == '{'){
 				return unmatchedSymbolAtEOF('}');
