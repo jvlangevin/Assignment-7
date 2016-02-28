@@ -158,11 +158,11 @@ public class Nathan_DoublyLinkedList<E> implements List<E>, Iterable<E>{
 		//we're adding a new node so create a new node
 		Node newNode = new Node();
 		
-		//indexNode is how we transverse the list
+		//indexNode is how we traverse the list
 		Node indexNode = header;
 		
 		
-		//if the index is less than half the size, transverse list starting at header
+		//if the index is less than half the size, traverse list starting at header
 		if(index < indexSize()/2)
 		{
 			indexNode = header;
