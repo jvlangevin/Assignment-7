@@ -23,15 +23,14 @@ public class LinkedListStack<E> {
 	 * Removes all of the elements from the stack.
 	 */
 	public void clear() {
-		// FILL IN
+		stack.clear();
 	}
 
 	/**
 	 * Returns true if the stack contains no elements.
 	 */
 	public boolean isEmpty() {
-		// FILL IN
-		return false;
+		return stack.isEmpty();
 	}
 
 	/**
