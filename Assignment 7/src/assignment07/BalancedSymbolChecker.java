@@ -1,6 +1,8 @@
 package assignment07;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  * Class containing the checkFile method for checking if the (, [, and { symbols
@@ -9,15 +11,93 @@ import java.io.FileNotFoundException;
  * @author ??
  */
 public class BalancedSymbolChecker {
-
+	
+	LinkedListStack<Character> charStack;
+	
 	/**
 	 * Returns a message indicating whether the input file has unmatched
 	 * symbols. (Use the methods below for constructing messages.) Throws
 	 * FileNotFoundException if the file does not exist.
+	 * @throws FileNotFoundException 
 	 */
-	public String checkFile(String filename) throws FileNotFoundException {
-		// FILL IN
-		return null;
+	public String checkFile(String filename) throws FileNotFoundException{
+		
+		charStack = new LinkedListStack<>();
+		Scanner scanner = new Scanner(new File(filename));
+		int lineNumber = 0;
+		
+		while (scanner.hasNextLine()){
+			
+			String thisLine = scanner.nextLine();
+			lineNumber++;
+			int column = 0;
+			
+			for (int i = 0; i < thisLine.length(); i++){
+				
+				column++;
+				char currentChar = thisLine.charAt(i);
+				
+				if (currentChar == '{' || currentChar == '[' || currentChar == '('){
+					charStack.push(currentChar);
+				}
+				
+				if (currentChar == '}' || currentChar == ']' || currentChar == ')'){
+					
+					if (charStack.isEmpty()){
+						
+						if (currentChar == '}'){
+							scanner.close();
+							return unmatchedSymbolAtEOF('{');
+						}
+						
+						else if (currentChar == ']'){
+							scanner.close();
+							return unmatchedSymbolAtEOF('[');
+						}
+						
+						else{
+							scanner.close();
+							return unmatchedSymbolAtEOF('(');
+						}
+					}
+					
+					if (charStack.peek() == '{' && currentChar != '}'){
+						scanner.close();
+						return unmatchedSymbol(lineNumber, column, currentChar, '}');
+					}
+					
+					else if (charStack.peek() == '[' && currentChar != ']'){
+						scanner.close();
+						return unmatchedSymbol(lineNumber, column, currentChar, ']');
+					}
+					
+					else if (charStack.peek() == '(' && currentChar != ')'){
+						scanner.close();
+						return unmatchedSymbol(lineNumber, column, currentChar, ')');
+					}
+					else{
+						charStack.pop();
+					}
+				}
+			}
+		}
+		scanner.close();
+
+		if (charStack.isEmpty()){
+			return allSymbolsMatch();
+		}
+		
+		else{
+			if (charStack.peek() == '{'){
+				return unmatchedSymbolAtEOF('}');
+			}
+			else if (charStack.peek() == '['){
+				return unmatchedSymbolAtEOF(']');
+			}
+			else{
+				return unmatchedSymbolAtEOF(')');
+			}
+		}
 	}
 
 	/**
@@ -51,4 +131,5 @@ public class BalancedSymbolChecker {
 	private String allSymbolsMatch() {
 		return "No errors found. All symbols match.";
 	}
+	
 }

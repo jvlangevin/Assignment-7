@@ -38,7 +38,6 @@ public class LinkedListStack<E> {
 	 * stack. Throws NoSuchElementException if the stack is empty.
 	 */
 	public E peek() throws NoSuchElementException {
-		// FILL IN
 		return stack.getLast();
 	}
 
