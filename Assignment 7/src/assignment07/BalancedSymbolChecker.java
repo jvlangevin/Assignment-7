@@ -85,15 +85,27 @@ public class BalancedSymbolChecker {
 				
 				if (currentChar =='\"' && !blockComment && !activeCharacter){
 					if (i != 0){
+						/*
+						 * If the current character is preceded by a '\', then proceed to the
+						 * next character 
+						 */
 						if (thisLine.charAt(i - 1) == '\\'){
 							continue;
 						}
 					}
 					
+					/*
+					 * If there is no active string, then the current character signifies the
+					 * beginning of a string literal
+					 */
 					if (!activeString){
 						activeString = true;
 						continue;
 					}
+					/*
+					 * If there is a string currently active, then the current character signifies
+					 * the end of a string literal
+					 */
 					else{
 						activeString = false;
 						continue;
@@ -126,14 +138,33 @@ public class BalancedSymbolChecker {
 				
 				if(currentChar == '\'' && !activeString && !blockComment)
 				{
+					if (i != 0){
+						/*
+						 * If the current character is preceded by a '\', then proceed to the
+						 * next character 
+						 */
+						if (thisLine.charAt(i - 1) == '\\'){
+							continue;
+						}
+					}
+					
+					/*
+					 * If the variable activeCharacter is set to false, then the current character
+					 * signifies the beginning of a character variable declaration					 * 
+					 */
 					if (!activeCharacter){
 						activeCharacter = true;
 						continue;
 					}
+					/*
+					 * If the variable activeCharacter is set to true, then the current character
+					 * signifies the end of a character variable declaration
+					 */
 					else{
 						activeCharacter = false;
 						continue;
 					}
+					
 //					//if character is a '
 //					if(specialStack.peek() == '\'')
 //					{
@@ -175,23 +206,7 @@ public class BalancedSymbolChecker {
 				--------------------------------------------------------------------------------*/
 				if(currentChar == '/' && activeString == false && activeCharacter == false)
 				{
-					if (i < thisLine.length() - 1){
-						/* 
-						 * If the character following the '/' is a '*', then a comment block has 
-						 * been started, and we proceed to the next character
-						 */
-						if (thisLine.charAt(i + 1) == '*'){
-							this.blockComment = true;
-							continue;
-						}
-						/*
-						 * If the character following the '/' is another '/', then we have reached
-						 * a line comment, and the rest of the line is ignored
-						 */
-						if (thisLine.charAt(i + 1) == '/'){
-							break;
-						}
-					}
+					
 					
 //					// If specialStack is empty, push '/' onto the stack
 //					if (specialStack.isEmpty()){
@@ -212,10 +227,28 @@ public class BalancedSymbolChecker {
 //					}
 				}
 				
+				if (i < thisLine.length() - 1){
+					/* 
+					 * If the character following the '/' is a '*', then a comment block has 
+					 * been started, and we proceed to the next character
+					 */
+					if (thisLine.charAt(i + 1) == '*'){
+						this.blockComment = true;
+						continue;
+					}
+					/*
+					 * If the character following the '/' is another '/', then we have reached
+					 * a line comment, and the rest of the line is ignored
+					 */
+					if (thisLine.charAt(i + 1) == '/'){
+						break;
+					}
+				}
+				
 				/*
-				 * If the current character is a '*' and the character following it is a '/', and
-				 * we are not defining a string or a character, then we have reached the end of a
-				 * comment block, and regular symbol checking resumes
+				 * If the current character is a '*' and the character following it is a '/', 
+				 * then we have reached the end of a comment block, and regular symbol checking
+				 * resumes
 				 */
 				if (currentChar == '*' && activeString == false && activeCharacter == false){
 					if (i < thisLine.length() - 1){
@@ -243,7 +276,6 @@ public class BalancedSymbolChecker {
 				if (this.activeCharacter){
 					continue;
 				}
-				
 				
 				// If the current character is {, [, or (, it is pushed onto the stack 
 				if (isLeftSymbol(currentChar)){
