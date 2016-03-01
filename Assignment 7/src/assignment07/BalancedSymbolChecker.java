@@ -16,8 +16,8 @@ public class BalancedSymbolChecker {
 	LinkedListStack<Character> specialStack;
 	boolean lineComment = false;
 	boolean blockComment = false;
+	boolean activeCharacter = false;
 	boolean activeString = false;
-	boolean activeStringLiteral = false;
 	
 	
 	/**
@@ -38,7 +38,7 @@ public class BalancedSymbolChecker {
 			
 			//if we are starting a new line we are no longer in a string or string literal
 			activeString = false;
-			activeStringLiteral = false;
+			activeCharacter = false;
 			
 			String thisLine = scanner.nextLine();
 			lineNumber++;
@@ -71,19 +71,36 @@ public class BalancedSymbolChecker {
 					we end the line or find another " character to pop the " off the special stack
 				
 				--------------------------------------------------------------------------------*/
-				if(currentChar == '\"' && activeStringLiteral == false)
-				{
+//				if(currentChar == '\"' && activeStringLiteral == false)
+//				{
+//					if (specialStack.isEmpty()){
+//						activeString = true;
+//						specialStack.push(currentChar);
+//					}
+//					else if (specialStack.peek() == '\"'){
+//						activeString = false;
+//						specialStack.pop();
+//					}
+//				}
 				
-					if(specialStack.peek() == '\"')
-					{
-						activeString = false;
-						specialStack.pop();
+				if (currentChar =='\"' && !blockComment && !activeCharacter){
+					if (i != 0){
+						if (thisLine.charAt(i - 1) == '\\'){
+							continue;
+						}
+					}
+					
+					if (!activeString){
+						activeString = true;
+						continue;
 					}
 					else{
-						activeString = true;
-						specialStack.push(currentChar);
+						activeString = false;
+						continue;
 					}
 				}
+				
+				
 				
 				/*------------------------------------------------------------------------------
 				-------------------------------------------------------------------------------- 
@@ -107,24 +124,31 @@ public class BalancedSymbolChecker {
 				
 				--------------------------------------------------------------------------------*/
 				
-				if(currentChar == '\'' && activeString == false)
+				if(currentChar == '\'' && !activeString && !blockComment)
 				{
-					
-					//if character is a '
-					if(specialStack.peek() == '\'')
-					{
-						activeStringLiteral = false;
-						specialStack.pop();
-					}
-					//if previous special character in stack is a backslash get rid of it but do not change activeStringLiteral
-					else if(specialStack.peek() == '\\')
-					{
-						specialStack.pop();
+					if (!activeCharacter){
+						activeCharacter = true;
+						continue;
 					}
 					else{
-						activeStringLiteral = true;
-						specialStack.push(currentChar);
+						activeCharacter = false;
+						continue;
 					}
+//					//if character is a '
+//					if(specialStack.peek() == '\'')
+//					{
+//						activeStringLiteral = false;
+//						specialStack.pop();
+//					}
+//					//if previous special character in stack is a backslash get rid of it but do not change activeStringLiteral
+//					else if(specialStack.peek() == '\\')
+//					{
+//						specialStack.pop();
+//					}
+//					else{
+//						activeStringLiteral = true;
+//						specialStack.push(currentChar);
+//					}
 					
 				}
 				
@@ -149,26 +173,77 @@ public class BalancedSymbolChecker {
 					the special stack
 				
 				--------------------------------------------------------------------------------*/
-				if(currentChar == '/' && activeString == false && activeStringLiteral == false)
+				if(currentChar == '/' && activeString == false && activeCharacter == false)
 				{
-					
-					//if it's a line comment (like //this is a comment ) then the rest of the line is ignored
-					if(specialStack.peek() == '/')
-					{
-						//get the previous '/' out of special stack and set i to line length so we can move on to the next line
-						specialStack.pop();
-						i = thisLine.length();
+					if (i < thisLine.length() - 1){
+						/* 
+						 * If the character following the '/' is a '*', then a comment block has 
+						 * been started, and we proceed to the next character
+						 */
+						if (thisLine.charAt(i + 1) == '*'){
+							this.blockComment = true;
+							continue;
+						}
+						/*
+						 * If the character following the '/' is another '/', then we have reached
+						 * a line comment, and the rest of the line is ignored
+						 */
+						if (thisLine.charAt(i + 1) == '/'){
+							break;
+						}
 					}
 					
-					//if it's the end of a block comment (like "/* block comment */") then we go back to checking for our main symbols
-					else if(specialStack.peek() == '*')
-					{
-						this.blockComment = false;
-					}
-					
-					
-						
+//					// If specialStack is empty, push '/' onto the stack
+//					if (specialStack.isEmpty()){
+//						specialStack.push('/');
+//					}
+//					//if it's a line comment (like //this is a comment ) then the rest of the line is ignored
+//					if(specialStack.peek() == '/')
+//					{
+//						//get the previous '/' out of special stack and set i to line length so we can move on to the next line
+//						specialStack.pop();
+//						i = thisLine.length();
+//					}
+//					
+//					//if it's the end of a block comment (like "/* block comment */") then we go back to checking for our main symbols
+//					else if(specialStack.peek() == '*')
+//					{
+//						this.blockComment = false;
+//					}
 				}
+				
+				/*
+				 * If the current character is a '*' and the character following it is a '/', and
+				 * we are not defining a string or a character, then we have reached the end of a
+				 * comment block, and regular symbol checking resumes
+				 */
+				if (currentChar == '*' && activeString == false && activeCharacter == false){
+					if (i < thisLine.length() - 1){
+						if (thisLine.charAt(i + 1) == '/'){
+							this.blockComment = false;
+							continue;
+						}
+					}
+				}
+				
+				// If the current character is within a comment block, proceed to the next character
+				if (this.blockComment){
+					continue;
+				}
+				
+				// If the current character is within a string, proceed to the next character
+				if (this.activeString){
+					continue;
+				}
+				
+				/*
+				 * If the current character is being defined as a character variable, proceed to
+				 * the next character
+				 */
+				if (this.activeCharacter){
+					continue;
+				}
+				
 				
 				// If the current character is {, [, or (, it is pushed onto the stack 
 				if (isLeftSymbol(currentChar)){
@@ -214,6 +289,11 @@ public class BalancedSymbolChecker {
 		}
 		scanner.close();
 
+		// If the end of the file is reached and there is an unclosed comment block
+		if (this.blockComment){
+			return unfinishedComment();
+		}
+		
 		// If the end of the file is reached and the stack is empty, then all of the symbols match
 		if (charStack.isEmpty()){
 			return allSymbolsMatch();
@@ -300,5 +380,6 @@ public class BalancedSymbolChecker {
 	private String allSymbolsMatch() {
 		return "No errors found. All symbols match.";
 	}
+	
 	
 }
