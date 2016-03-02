@@ -159,7 +159,7 @@ public class BalancedSymbolCheckerTest {
 	
 	@Test 
 	public void checkTwoCharacter() throws FileNotFoundException {
-		String output = "No errors found. All symbols match."; //I expected this but am unsure if correct
+		String output = "No errors found. All symbols match."; 
 		
 		BalancedSymbolChecker test = new BalancedSymbolChecker();
 		assertEquals(output, test.checkFile("A7_examples/A7_examples/twocharacterChar.java"));

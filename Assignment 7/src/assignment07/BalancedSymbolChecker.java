@@ -63,6 +63,14 @@ public class BalancedSymbolChecker {
 						 * next character 
 						 */
 						if (thisLine.charAt(i - 1) == '\\'){
+							if(i > 1 && thisLine.charAt(i-2) == '\\' && activeString)
+							{
+								activeString = false;
+							}
+							else if(i > 1 && thisLine.charAt(i-2) == '\\' && !activeString)
+							{
+								activeString = true;
+							}
 							continue;
 						}
 					}
@@ -99,6 +107,15 @@ public class BalancedSymbolChecker {
 						 * next character 
 						 */
 						if (thisLine.charAt(i - 1) == '\\'){
+							if(i > 1 && thisLine.charAt(i-2) == '\\' && activeCharacter)
+							{
+								activeCharacter = false;
+							}
+							else if(i > 1 && thisLine.charAt(i-2) == '\\' && !activeCharacter)
+							{
+								activeCharacter = true;
+							}
+							
 							continue;
 						}
 					}
