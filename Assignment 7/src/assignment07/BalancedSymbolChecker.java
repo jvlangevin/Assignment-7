@@ -259,7 +259,7 @@ public class BalancedSymbolChecker {
 	 * @param inputChar
 	 * @return
 	 */
-	private static boolean isLeftSymbol(char inputChar){
+	protected static boolean isLeftSymbol(char inputChar){
 		
 		if (inputChar == '{' || inputChar == '[' || inputChar == '(')
 		{
@@ -276,7 +276,7 @@ public class BalancedSymbolChecker {
 	 * @param inputChar
 	 * @return
 	 */
-	private static boolean isRightSymbol(char inputChar){
+	protected static boolean isRightSymbol(char inputChar){
 		
 		if (inputChar == '}' || inputChar == ']' || inputChar == ')')
 		{

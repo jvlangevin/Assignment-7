@@ -164,5 +164,56 @@ public class BalancedSymbolCheckerTest {
 		BalancedSymbolChecker test = new BalancedSymbolChecker();
 		assertEquals(output, test.checkFile("A7_examples/A7_examples/twocharacterChar.java"));
 	}
+	
+	@Test
+	public void checkStringWithSpecialCharacters() throws FileNotFoundException {
+		String output = "No errors found. All symbols match.";
+		
+		BalancedSymbolChecker test = new BalancedSymbolChecker();
+		assertEquals(output, test.checkFile("A7_examples/A7_examples/Class17.java"));
+	}
+	
+	@Test
+	public void checkFileWithDeepNesting() throws FileNotFoundException {
+		String output = "No errors found. All symbols match.";
+		
+		BalancedSymbolChecker test = new BalancedSymbolChecker();
+		assertEquals(output, test.checkFile("A7_examples/A7_examples/Class18.java"));
+	}
 
+	@Test
+	public void isLeftSymbolCurlyBrace(){
+		char testChar = '{';
+		assertTrue(BalancedSymbolChecker.isLeftSymbol(testChar));
+	}
+	
+	@Test
+	public void isLeftSymbolSquareBracket(){
+		char testChar = '[';
+		assertTrue(BalancedSymbolChecker.isLeftSymbol(testChar));
+	}
+	
+	@Test
+	public void isLeftSymbolParenthesis(){
+		char testChar = '(';
+		assertTrue(BalancedSymbolChecker.isLeftSymbol(testChar));
+	}
+	
+	@Test
+	public void isRightSymbolCurlyBrace(){
+		char testChar = '}';
+		assertTrue(BalancedSymbolChecker.isRightSymbol(testChar));
+	}
+	
+	@Test
+	public void isRightSymbolSquareBracket(){
+		char testChar = ']';
+		assertTrue(BalancedSymbolChecker.isRightSymbol(testChar));
+	}
+	
+	@Test
+	public void isRightSymbolParenthesis(){
+		char testChar = ')';
+		assertTrue(BalancedSymbolChecker.isRightSymbol(testChar));
+	}
 }
