@@ -46,7 +46,6 @@ public class LinkedListStack<E> {
 	 * NoSuchElementException if the stack is empty.
 	 */
 	public E pop() throws NoSuchElementException {
-		// FILL IN
 		return stack.removeLast();
 	}
 

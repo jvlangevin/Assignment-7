@@ -13,12 +13,9 @@ import java.util.Scanner;
 public class BalancedSymbolChecker {
 	
 	LinkedListStack<Character> charStack;
-	LinkedListStack<Character> specialStack;
-	boolean lineComment = false;
 	boolean blockComment = false;
 	boolean activeCharacter = false;
 	boolean activeString = false;
-	
 	
 	/**
 	 * Returns a message indicating whether the input file has unmatched
@@ -29,8 +26,6 @@ public class BalancedSymbolChecker {
 	public String checkFile(String filename) throws FileNotFoundException{
 		
 		charStack = new LinkedListStack<>();
-		specialStack = new LinkedListStack<>();
-		
 		
 		Scanner scanner = new Scanner(new File(filename));
 		int lineNumber = 0; // Keeps track of which line of the file the Scanner is reading
@@ -50,7 +45,6 @@ public class BalancedSymbolChecker {
 				
 				colNumber++;
 				char currentChar = thisLine.charAt(i);
-				
 				
 				/*------------------------------------------------------------------------------
 				  string handling such as "word word word" ; checks if char is double quotation				
@@ -93,8 +87,6 @@ public class BalancedSymbolChecker {
 					}
 				}
 				
-				
-				
 				/*------------------------------------------------------------------------------
 				  string literal handling such as ']' or '\n' ; checks if char is double quotation
 				--------------------------------------------------------------------------------*/
@@ -122,7 +114,7 @@ public class BalancedSymbolChecker {
 					
 					/*
 					 * If the variable activeCharacter is set to false, then the current character
-					 * signifies the beginning of a character variable declaration					 * 
+					 * signifies the beginning of a character variable declaration 
 					 */
 					if (!activeCharacter){
 						activeCharacter = true;
@@ -136,20 +128,13 @@ public class BalancedSymbolChecker {
 						activeCharacter = false;
 						continue;
 					}
-
-					
 				}
 				
-				
-				
 				/*------------------------------------------------------------------------------
-				  part handling comments such as // or block comments like /* and it's ending
+				  part handling comments such as // or block comments like /* and its ending
 				--------------------------------------------------------------------------------*/
 				if(currentChar == '/' && activeString == false && activeCharacter == false)
 				{
-					
-					
-				
 					if (i < thisLine.length() - 1){
 						/* 
 						 * If the character following the '/' is a '*', then a comment block has 
@@ -209,16 +194,13 @@ public class BalancedSymbolChecker {
 				// Checks if the current character is }, ], or )
 				if (isRightSymbol(currentChar)){
 					
-					// If the stack is empty, then no closing symbol should be expected at
-					// this point
+					// If the stack is empty, then no closing symbol should be expected at this point
 					if (charStack.isEmpty()){
 						scanner.close();
 						return unmatchedSymbol(lineNumber, colNumber, currentChar, ' ');
 					}
 					
-					// If the character at the top of the stack is not the matching symbol
-					// of the current element
-					
+					// If the character at the top of the stack is not the matching symbol of the current element
 					if (charStack.peek() == '{' && currentChar != '}'){
 						scanner.close();
 						return unmatchedSymbol(lineNumber, colNumber, currentChar, '}');
@@ -270,7 +252,6 @@ public class BalancedSymbolChecker {
 		}
 	}
 	
-	
 	/**
 	 * Helper method. If the character is one of our left character sets, returns true.
 	 * @param inputChar
@@ -284,7 +265,6 @@ public class BalancedSymbolChecker {
 		}
 		
 		return false;
-	
 	}
 
 	
@@ -336,6 +316,5 @@ public class BalancedSymbolChecker {
 	private String allSymbolsMatch() {
 		return "No errors found. All symbols match.";
 	}
-	
 	
 }
