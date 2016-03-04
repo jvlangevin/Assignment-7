@@ -1,11 +1,14 @@
 package assignment07;
 
 import static org.junit.Assert.*;
-
 import java.io.FileNotFoundException;
-
 import org.junit.Test;
 
+/**
+ * 
+ * @author Jason Langevin
+ * @author Nathan Novak
+ */
 public class BalancedSymbolCheckerTest {
 
 	@Test

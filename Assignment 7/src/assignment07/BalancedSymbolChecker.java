@@ -8,7 +8,8 @@ import java.util.Scanner;
  * Class containing the checkFile method for checking if the (, [, and { symbols
  * in an input file are correctly matched.
  * 
- * @author ??
+ * @author Jason Langevin
+ * @author Nathan Novak
  */
 public class BalancedSymbolChecker {
 	

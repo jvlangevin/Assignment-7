@@ -6,7 +6,8 @@ import java.util.NoSuchElementException;
 /**
  * Represents a generic stack (first in, last out).
  * 
- * @author ??
+ * @author Jason Langevin
+ * @author Nathan Novak
  * 
  * @param <E>
  *            -- the type of elements contained in the stack
