@@ -181,39 +181,4 @@ public class BalancedSymbolCheckerTest {
 		assertEquals(output, test.checkFile("A7_examples/A7_examples/Class18.java"));
 	}
 
-	@Test
-	public void isLeftSymbolCurlyBrace(){
-		char testChar = '{';
-		assertTrue(BalancedSymbolChecker.isLeftSymbol(testChar));
-	}
-	
-	@Test
-	public void isLeftSymbolSquareBracket(){
-		char testChar = '[';
-		assertTrue(BalancedSymbolChecker.isLeftSymbol(testChar));
-	}
-	
-	@Test
-	public void isLeftSymbolParenthesis(){
-		char testChar = '(';
-		assertTrue(BalancedSymbolChecker.isLeftSymbol(testChar));
-	}
-	
-	@Test
-	public void isRightSymbolCurlyBrace(){
-		char testChar = '}';
-		assertTrue(BalancedSymbolChecker.isRightSymbol(testChar));
-	}
-	
-	@Test
-	public void isRightSymbolSquareBracket(){
-		char testChar = ']';
-		assertTrue(BalancedSymbolChecker.isRightSymbol(testChar));
-	}
-	
-	@Test
-	public void isRightSymbolParenthesis(){
-		char testChar = ')';
-		assertTrue(BalancedSymbolChecker.isRightSymbol(testChar));
-	}
 }
